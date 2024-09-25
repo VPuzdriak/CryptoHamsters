@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CryptoHamsters.CryptoPairs\CryptoHamsters.CryptoPairs.csproj" />
+  </ItemGroup>
+
 </Project>
