@@ -7,9 +7,9 @@ public sealed class CryptoPair
     public string BaseAsset { get; init; }
     public string QuoteAsset { get; init; }
     public DateTime ListedAtUtc { get; init; }
-    public decimal Price { get; private set; }
-    public DateTime PriceUpdatedAtUtc { get; private set; }
-    public long Version { get; private set; }
+    public decimal Price { get; set; }
+    public DateTime PriceUpdatedAtUtc { get; set; }
+    public long Version { get; set; }
 
     private CryptoPair()
     {
