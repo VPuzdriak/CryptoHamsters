@@ -1,25 +1,60 @@
 mutation {
-    listBTC: listCryptoPair(input: {ticker: "BTC/USDT" baseAsset: "BTC" quoteAsset: "USDT" price: 58000}) {
+    listBTC: listCryptoPair(
+        input: {
+            ticker: "BTC/USDT"
+            baseAsset: "BTC"
+            quoteAsset: "USDT"
+            price: 58000
+        }
+    ) {
         id
         ticker
         price
     }
-    listETH: listCryptoPair(input: {ticker: "ETH/USDT" baseAsset: "ETH" quoteAsset: "USDT" price: 2500}) {
+    listETH: listCryptoPair(
+        input: {
+            ticker: "ETH/USDT"
+            baseAsset: "ETH"
+            quoteAsset: "USDT"
+            price: 2500
+        }
+    ) {
         id
         ticker
         price
     }
-    listSOL: listCryptoPair(input: {ticker: "SOL/USDT" baseAsset: "SOL" quoteAsset: "USDT" price: 120}) {
+    listSOL: listCryptoPair(
+        input: {
+            ticker: "SOL/USDT"
+            baseAsset: "SOL"
+            quoteAsset: "USDT"
+            price: 120
+        }
+    ) {
         id
         ticker
         price
     }
-    listSTRK: listCryptoPair(input: {ticker: "STRK/USDT" baseAsset: "STRK" quoteAsset: "USDT" price: 0.4}) {
+    listSTRK: listCryptoPair(
+        input: {
+            ticker: "STRK/USDT"
+            baseAsset: "STRK"
+            quoteAsset: "USDT"
+            price: 0.4
+        }
+    ) {
         id
         ticker
         price
     }
-    listKAVA: listCryptoPair(input: {ticker: "KAVA/USDT" baseAsset: "KAVA" quoteAsset: "USDT" price: 0.37}) {
+    listKAVA: listCryptoPair(
+        input: {
+            ticker: "KAVA/USDT"
+            baseAsset: "KAVA"
+            quoteAsset: "USDT"
+            price: 0.37
+        }
+    ) {
         id
         ticker
         price
@@ -35,7 +70,7 @@ query {
 }
 
 mutation {
-    createCustomer(input: {name: "Volodymyr Puzdriak"}) {
+    createCustomer(input: { name: "Volodymyr Puzdriak" }) {
         id
         name
     }
@@ -45,5 +80,90 @@ query {
     customers {
         id
         name
+    }
+}
+
+query {
+    customerWallets(customerId: "27b1922c-8df1-43a1-890c-1cf8923f5d9f") {
+        wallets {
+            walletId
+            type
+            createdAtUtc
+        }
+    }
+}
+
+query {
+    wallet(walletId: "9eba7f0a-ca78-4a3d-b33c-c7453767dcd3") {
+        type
+        assets {
+            name
+            amount
+        }
+    }
+}
+
+mutation {
+    topUpWallet(
+        input: {
+            walletId: "9eba7f0a-ca78-4a3d-b33c-c7453767dcd3"
+            assetName: "USDT"
+            amount: 50
+        }
+    ) {
+        assetName
+        amount
+        createdAtUtc
+    }
+}
+
+mutation {
+    withdrawAssetFromWallet(
+        input: {
+            walletId: "9eba7f0a-ca78-4a3d-b33c-c7453767dcd3"
+            assetName: "USDT"
+            amount: 50
+        }
+    ) {
+        assetName
+        amount
+        createdAtUtc
+    }
+}
+
+query {
+    walletTransactions(walletId: "9eba7f0a-ca78-4a3d-b33c-c7453767dcd3") {
+        walletId
+        transactions {
+            id
+            transactionType
+            assetName
+            amount
+            createdAtUtc
+        }
+    }
+}
+
+mutation {
+    placeMarketOrder(input: {cryptoPairId: "daf0f919-f37b-4b6c-87f7-cd0d0575f617" quoteAssetAmount: 25, walletId: "9eba7f0a-ca78-4a3d-b33c-c7453767dcd3"}) {
+        orderId
+        cryptoPairId
+        status
+        quoteAssetAmount
+    }
+}
+
+query {
+    marketOrders(walletId: "9eba7f0a-ca78-4a3d-b33c-c7453767dcd3") {
+        orderId
+        status
+        cryptoPairId
+        placedAtUtc
+        quoteAssetAmount
+        fulfilledAmount
+        fulfillmentPrice
+        fulfilledAtUtc
+        cancelledAtUtc
+        cancellationReason
     }
 }
