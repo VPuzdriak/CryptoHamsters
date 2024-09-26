@@ -1,4 +1,5 @@
-﻿using CryptoHamsters.Wallets.Wallets.TopUp;
+﻿using CryptoHamsters.Wallets.Wallets;
+using CryptoHamsters.Wallets.Wallets.TopUp;
 using CryptoHamsters.Wallets.Wallets.Withdraw;
 
 using MediatR;
@@ -20,6 +21,7 @@ public static class WalletTransactionsMutation
         return new WalletTransactionPayload(
             walletTransaction.Id,
             walletTransaction.WalletId,
+            WalletTransactionType.TopUp,
             walletTransaction.AssetName,
             walletTransaction.Amount,
             walletTransaction.CreatedAtUtc);
@@ -37,6 +39,7 @@ public static class WalletTransactionsMutation
         return new WalletTransactionPayload(
             walletTransaction.Id,
             walletTransaction.WalletId,
+            WalletTransactionType.Withdraw,
             walletTransaction.AssetName,
             walletTransaction.Amount,
             walletTransaction.CreatedAtUtc);

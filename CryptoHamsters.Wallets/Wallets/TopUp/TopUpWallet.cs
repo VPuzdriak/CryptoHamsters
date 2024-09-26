@@ -23,6 +23,7 @@ internal sealed class TopUpWalletHandler(IWalletRepository walletRepository)
         return new WalletTransaction(
             toppedUp.TransactionId,
             toppedUp.WalletId,
+            WalletTransactionType.TopUp,
             toppedUp.Asset.Name,
             toppedUp.Asset.Amount,
             toppedUp.TimeStampUtc);

@@ -47,6 +47,9 @@ builder.Services
 
         configure.Schema.For<CustomerWallets>().DatabaseSchemaName("wallets");
         configure.Projections.Add<CustomerWalletsProjection>(ProjectionLifecycle.Async);
+
+        configure.Schema.For<WalletTransactions>().DatabaseSchemaName("wallets");
+        configure.Projections.Add<WalletTransactionsProjection>(ProjectionLifecycle.Async);
     })
     .AddAsyncDaemon(DaemonMode.Solo)
     .AddSubscriptionWithServices<PriceChangedSubscription>(ServiceLifetime.Singleton, configure =>

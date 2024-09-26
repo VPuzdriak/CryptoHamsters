@@ -37,6 +37,7 @@ internal sealed class WithdrawAssetFromWalletHandler(IWalletRepository walletRep
         return new WalletTransaction(
             assetWithdrawn.TransactionId,
             assetWithdrawn.WalletId,
+            WalletTransactionType.Withdraw,
             assetWithdrawn.Asset.Name,
             assetWithdrawn.Asset.Amount,
             assetWithdrawn.TimeStampUtc);
