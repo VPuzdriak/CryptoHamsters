@@ -6,6 +6,7 @@ using CryptoHamsters.Customers.Domain;
 using CryptoHamsters.Wallets;
 using CryptoHamsters.Wallets.Domain;
 using CryptoHamsters.Wallets.Infrastructure;
+using CryptoHamsters.Wallets.Views;
 
 using Marten;
 using Marten.Events.Daemon.Coordination;
@@ -43,6 +44,9 @@ builder.Services
         configure.Schema.For<Wallet>().DatabaseSchemaName("wallets");
         configure.Projections.Snapshot<Wallet>(SnapshotLifecycle.Async,
             asyncConfig => asyncConfig.ProjectionName = "wallets");
+
+        configure.Schema.For<CustomerWallets>().DatabaseSchemaName("wallets");
+        configure.Projections.Add<CustomerWalletsProjection>(ProjectionLifecycle.Async);
     })
     .AddAsyncDaemon(DaemonMode.Solo)
     .AddSubscriptionWithServices<PriceChangedSubscription>(ServiceLifetime.Singleton, configure =>

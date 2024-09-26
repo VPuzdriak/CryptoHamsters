@@ -17,4 +17,8 @@
         <PackageReference Include="HotChocolate.Types.Analyzers" Version="14.0.0-rc.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="GraphQL\Wallets\" />
+    </ItemGroup>
+
 </Project>
