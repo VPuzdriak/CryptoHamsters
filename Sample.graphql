@@ -1,0 +1,49 @@
+mutation {
+    listBTC: listCryptoPair(input: {ticker: "BTC/USDT" baseAsset: "BTC" quoteAsset: "USDT" price: 58000}) {
+        id
+        ticker
+        price
+    }
+    listETH: listCryptoPair(input: {ticker: "ETH/USDT" baseAsset: "ETH" quoteAsset: "USDT" price: 2500}) {
+        id
+        ticker
+        price
+    }
+    listSOL: listCryptoPair(input: {ticker: "SOL/USDT" baseAsset: "SOL" quoteAsset: "USDT" price: 120}) {
+        id
+        ticker
+        price
+    }
+    listSTRK: listCryptoPair(input: {ticker: "STRK/USDT" baseAsset: "STRK" quoteAsset: "USDT" price: 0.4}) {
+        id
+        ticker
+        price
+    }
+    listKAVA: listCryptoPair(input: {ticker: "KAVA/USDT" baseAsset: "KAVA" quoteAsset: "USDT" price: 0.37}) {
+        id
+        ticker
+        price
+    }
+}
+
+query {
+    cryptoPairs(quoteAsset: "USDT") {
+        id
+        ticker
+        price
+    }
+}
+
+mutation {
+    createCustomer(input: {name: "Volodymyr Puzdriak"}) {
+        id
+        name
+    }
+}
+
+query {
+    customers {
+        id
+        name
+    }
+}
