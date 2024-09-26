@@ -1,10 +1,8 @@
 using CryptoHamsters.CryptoPairs.Listing;
 
-using HotChocolate.Types;
-
 using MediatR;
 
-namespace CryptoHamsters.Service.GraphQL.CryptoPairs;
+namespace CryptoHamsters.Service.GraphQL.CryptoPairs.Get;
 
 [QueryType]
 public static class GetCryptoPairsQuery

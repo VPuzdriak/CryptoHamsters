@@ -1,5 +1,6 @@
 using CryptoHamsters.CryptoPairs;
 using CryptoHamsters.CryptoPairs.Domain;
+using CryptoHamsters.CryptoPairs.Infrastructure;
 using CryptoHamsters.Customers;
 using CryptoHamsters.Customers.Domain;
 
@@ -35,14 +36,20 @@ builder.Services
         configure.Projections.Snapshot<Customer>(SnapshotLifecycle.Async,
             asyncConfig => asyncConfig.ProjectionName = "customers");
     })
-    .AddAsyncDaemon(DaemonMode.Solo);
+    .AddAsyncDaemon(DaemonMode.Solo)
+    .AddSubscriptionWithServices<PriceChangedSubscription>(ServiceLifetime.Singleton, configure =>
+    {
+        configure.IncludeType<CryptoPairPriceChanged>();
+    });
 
 builder.Services
     .AddGraphQLServer()
-    .AddServiceTypes();
+    .AddServiceTypes()
+    .AddInMemorySubscriptions();
 
 var app = builder.Build();
 
+app.UseWebSockets();
 app.MapGraphQL();
 
 app.MapGet("/reset/{projectionName}",

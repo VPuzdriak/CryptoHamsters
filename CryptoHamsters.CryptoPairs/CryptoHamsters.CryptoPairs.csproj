@@ -10,4 +10,8 @@
       <ProjectReference Include="..\CryptoHamsters.Shared\CryptoHamsters.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="HotChocolate.Subscriptions" Version="14.0.0-rc.2" />
+    </ItemGroup>
+
 </Project>
