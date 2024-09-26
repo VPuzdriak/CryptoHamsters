@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryptoHamsters.CryptoPairs\CryptoHamsters.CryptoPairs.csproj" />
+    <ProjectReference Include="..\CryptoHamsters.Customers\CryptoHamsters.Customers.csproj" />
   </ItemGroup>
 
 </Project>

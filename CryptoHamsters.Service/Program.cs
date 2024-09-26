@@ -1,5 +1,7 @@
 using CryptoHamsters.CryptoPairs;
 using CryptoHamsters.CryptoPairs.Domain;
+using CryptoHamsters.Customers;
+using CryptoHamsters.Customers.Domain;
 
 using Marten;
 using Marten.Events.Daemon.Coordination;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCryptoPairs();
+builder.Services.AddCustomers();
 
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssemblies(
@@ -27,6 +30,10 @@ builder.Services
         configure.Schema.For<CryptoPair>().DatabaseSchemaName("crypto_pairs");
         configure.Projections.Snapshot<CryptoPair>(SnapshotLifecycle.Inline,
             asyncConfig => asyncConfig.ProjectionName = "crypto_pairs");
+
+        configure.Schema.For<Customer>().DatabaseSchemaName("customers");
+        configure.Projections.Snapshot<Customer>(SnapshotLifecycle.Async,
+            asyncConfig => asyncConfig.ProjectionName = "customers");
     })
     .AddAsyncDaemon(DaemonMode.Solo);
 

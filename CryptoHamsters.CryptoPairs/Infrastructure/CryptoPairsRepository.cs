@@ -1,5 +1,4 @@
 using CryptoHamsters.CryptoPairs.Domain;
-using CryptoHamsters.CryptoPairs.Listing;
 
 using Marten;
 
