@@ -14,6 +14,7 @@ public interface IWalletRepository
         CancellationToken cancellationToken);
 
     Task UpdateWithAsync<T>(Guid walletId, T @event, CancellationToken cancellationToken) where T : class;
+    Task UpdateWithAsync(Guid walletId, CancellationToken cancellationToken, params object[] events);
     Task<Wallet?> GetAsync(Guid walletId, CancellationToken cancellationToken);
 }
 
@@ -43,6 +44,12 @@ internal sealed class WalletRepository(IDocumentSession documentSession) : IWall
     {
         documentSession.Events.Append(walletId, @event);
         await documentSession.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task UpdateWithAsync(Guid walletId, CancellationToken cancellationToken, params object[] events)
+    {
+        documentSession.Events.Append(walletId, events);
+        return documentSession.SaveChangesAsync(cancellationToken);
     }
 
     public Task<Wallet?> GetAsync(Guid walletId, CancellationToken cancellationToken)
