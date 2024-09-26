@@ -37,4 +37,11 @@ public sealed class CryptoPair
 
     public static CryptoPair Create(CryptoPairListed @event) =>
         new(@event.Id, @event.Ticker, @event.BaseAsset, @event.QuoteAsset, @event.ListedAtUtc, @event.Price);
+
+    private void Apply(CryptoPairPriceChanged @event)
+    {
+        Price = Price + @event.PriceChange;
+        PriceUpdatedAtUtc = @event.PriceUpdatedAtUtc;
+        Version++;
+    }
 }
