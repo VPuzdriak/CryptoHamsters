@@ -30,9 +30,25 @@ internal sealed class PriceChangerService(IServiceProvider serviceProvider) : Ba
 
     private decimal GetPriceChange(decimal lastPrice)
     {
-        var multiplier = Random.Shared.Next(1, 3);
-        var direction = Random.Shared.Next(0, 2) == 0 ? -1 : 1;
+        while (true)
+        {
+            // Price goes down or up
+            var direction = Random.Shared.Next(0, 2) == 0 ? -1 : 1;
 
-        return (lastPrice / 10 * multiplier * direction);
+            decimal change = lastPrice switch
+            {
+                >= 10_000 => Random.Shared.Next(0, 101),
+                >= 1_000 => Random.Shared.Next(0, 11),
+                _ => Random.Shared.Next(0, 3)
+            } * direction;
+
+            var newPrice = lastPrice + change;
+
+            // Price should be greater than 0. For demo purposes, we don't want to have negative prices
+            if (newPrice > 0)
+            {
+                return change;
+            }
+        }
     }
 }
