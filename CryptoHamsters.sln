@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoHamsters.CryptoPairs"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoHamsters.Customers", "CryptoHamsters.Customers\CryptoHamsters.Customers.csproj", "{6EFE3D33-D0E0-426E-B698-02919BED919B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoHamsters.Shared", "CryptoHamsters.Shared\CryptoHamsters.Shared.csproj", "{58FE9123-9283-4E08-9EBF-717B687A1900}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{6EFE3D33-D0E0-426E-B698-02919BED919B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EFE3D33-D0E0-426E-B698-02919BED919B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EFE3D33-D0E0-426E-B698-02919BED919B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58FE9123-9283-4E08-9EBF-717B687A1900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58FE9123-9283-4E08-9EBF-717B687A1900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58FE9123-9283-4E08-9EBF-717B687A1900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58FE9123-9283-4E08-9EBF-717B687A1900}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
