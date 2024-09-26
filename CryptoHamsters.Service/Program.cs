@@ -5,6 +5,9 @@ using CryptoHamsters.Customers;
 using CryptoHamsters.Customers.Domain;
 using CryptoHamsters.Orders;
 using CryptoHamsters.Orders.Domain;
+using CryptoHamsters.Service.GraphQL;
+using CryptoHamsters.Service.Marten;
+using CryptoHamsters.Service.MediatR;
 using CryptoHamsters.Wallets;
 using CryptoHamsters.Wallets.Domain;
 using CryptoHamsters.Wallets.Infrastructure;
@@ -24,54 +27,9 @@ builder.Services.AddCustomers();
 builder.Services.AddWallets();
 builder.Services.AddOrders();
 
-builder.Services.AddMediatR(configuration =>
-    configuration.RegisterServicesFromAssemblies(
-        AppDomain.CurrentDomain.GetAssemblies()
-            .Where(a => a.FullName?.Contains("CryptoHamsters") is true)
-            .ToArray()));
-
-builder.Services
-    .AddMarten(configure =>
-    {
-        configure.Connection(builder.Configuration.GetConnectionString("CryptoHamsters")!);
-        configure.Events.DatabaseSchemaName = "events";
-
-        configure.Schema.For<CryptoPair>().DatabaseSchemaName("crypto_pairs");
-        configure.Projections.Snapshot<CryptoPair>(SnapshotLifecycle.Inline,
-            asyncConfig => asyncConfig.ProjectionName = "crypto_pairs");
-
-        configure.Schema.For<Customer>().DatabaseSchemaName("customers");
-        configure.Projections.Snapshot<Customer>(SnapshotLifecycle.Async,
-            asyncConfig => asyncConfig.ProjectionName = "customers");
-
-        configure.Schema.For<Wallet>().DatabaseSchemaName("wallets");
-        configure.Projections.Snapshot<Wallet>(SnapshotLifecycle.Async,
-            asyncConfig => asyncConfig.ProjectionName = "wallets");
-
-        configure.Schema.For<CustomerWallets>().DatabaseSchemaName("wallets");
-        configure.Projections.Add<CustomerWalletsProjection>(ProjectionLifecycle.Async);
-
-        configure.Schema.For<WalletTransactions>().DatabaseSchemaName("wallets");
-        configure.Projections.Add<WalletTransactionsProjection>(ProjectionLifecycle.Async);
-
-        configure.Schema.For<MarketOrder>().DatabaseSchemaName("orders");
-        configure.Projections.Snapshot<MarketOrder>(SnapshotLifecycle.Async,
-            asyncConfig => asyncConfig.ProjectionName = "market_orders");
-    })
-    .AddAsyncDaemon(DaemonMode.Solo)
-    .AddSubscriptionWithServices<PriceChangedSubscription>(ServiceLifetime.Singleton, configure =>
-    {
-        configure.IncludeType<CryptoPairPriceChanged>();
-    })
-    .AddSubscriptionWithServices<CustomerCreatedSubscription>(ServiceLifetime.Scoped, configure =>
-    {
-        configure.IncludeType<CustomerCreated>();
-    });
-
-builder.Services
-    .AddGraphQLServer()
-    .AddServiceTypes()
-    .AddInMemorySubscriptions();
+builder.Services.ConfigureMediatR();
+builder.Services.ConfigureMarten(builder.Configuration);
+builder.Services.ConfigureGraphQL();
 
 var app = builder.Build();
 
