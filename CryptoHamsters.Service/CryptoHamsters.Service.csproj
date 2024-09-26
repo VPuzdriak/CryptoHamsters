@@ -9,6 +9,7 @@
     <ItemGroup>
         <ProjectReference Include="..\CryptoHamsters.CryptoPairs\CryptoHamsters.CryptoPairs.csproj"/>
         <ProjectReference Include="..\CryptoHamsters.Customers\CryptoHamsters.Customers.csproj"/>
+        <ProjectReference Include="..\CryptoHamsters.Orders\CryptoHamsters.Orders.csproj" />
         <ProjectReference Include="..\CryptoHamsters.Wallets\CryptoHamsters.Wallets.csproj" />
     </ItemGroup>
 

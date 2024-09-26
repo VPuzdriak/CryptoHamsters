@@ -3,6 +3,8 @@ using CryptoHamsters.CryptoPairs.Domain;
 using CryptoHamsters.CryptoPairs.Infrastructure;
 using CryptoHamsters.Customers;
 using CryptoHamsters.Customers.Domain;
+using CryptoHamsters.Orders;
+using CryptoHamsters.Orders.Domain;
 using CryptoHamsters.Wallets;
 using CryptoHamsters.Wallets.Domain;
 using CryptoHamsters.Wallets.Infrastructure;
@@ -20,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCryptoPairs();
 builder.Services.AddCustomers();
 builder.Services.AddWallets();
+builder.Services.AddOrders();
 
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssemblies(
@@ -50,6 +53,10 @@ builder.Services
 
         configure.Schema.For<WalletTransactions>().DatabaseSchemaName("wallets");
         configure.Projections.Add<WalletTransactionsProjection>(ProjectionLifecycle.Async);
+
+        configure.Schema.For<MarketOrder>().DatabaseSchemaName("orders");
+        configure.Projections.Snapshot<MarketOrder>(SnapshotLifecycle.Async,
+            asyncConfig => asyncConfig.ProjectionName = "market_orders");
     })
     .AddAsyncDaemon(DaemonMode.Solo)
     .AddSubscriptionWithServices<PriceChangedSubscription>(ServiceLifetime.Singleton, configure =>

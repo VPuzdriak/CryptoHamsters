@@ -13,6 +13,7 @@ public interface ICryptoPairsRepository
         CryptoPairListed cryptoPairListed,
         CancellationToken cancellationToken);
 
+    Task<CryptoPair?> GetAsync(Guid id, CancellationToken cancellationToken);
     Task<IReadOnlyList<CryptoPair>> GetCryptoPairsAsync(string quoteAsset, CancellationToken cancellationToken);
     Task UpdateWithAsync<T>(Guid pairId, T @event, CancellationToken cancellationToken) where T : class;
 }
@@ -33,6 +34,9 @@ internal sealed class CryptoPairsRepository(IDocumentSession documentSession) : 
         documentSession.Events.StartStream<CryptoPair>(pairId, cryptoPairListed);
         await documentSession.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<CryptoPair?> GetAsync(Guid id, CancellationToken cancellationToken) =>
+        documentSession.LoadAsync<CryptoPair>(id, token: cancellationToken);
 
     public Task<IReadOnlyList<CryptoPair>> GetCryptoPairsAsync(
         string quoteAsset,
