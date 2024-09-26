@@ -32,7 +32,10 @@ public sealed class Wallet
     public static Wallet Create(WalletCreated @event) =>
         new(@event.Id, @event.CustomerId, @event.Type, @event.CreatedAtUtc);
 
-    public void Apply(WalletToppedUp @event)
+    public bool CanWithdrawAsset(WalletAsset asset) =>
+        Assets.Any(a => a.Name == asset.Name && a.Amount >= asset.Amount);
+
+    private void Apply(WalletToppedUp @event)
     {
         var asset = Assets.FirstOrDefault(a => a.Name == @event.Asset.Name);
 
@@ -46,7 +49,7 @@ public sealed class Wallet
         Version++;
     }
 
-    public void Apply(WalletAssetWithdrawn @event)
+    private void Apply(WalletAssetWithdrawn @event)
     {
         var asset = Assets.FirstOrDefault(a => a.Name == @event.Asset.Name);
 

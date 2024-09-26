@@ -3,7 +3,7 @@ using CryptoHamsters.Wallets.Infrastructure;
 
 using MediatR;
 
-namespace CryptoHamsters.Wallets.TopUp;
+namespace CryptoHamsters.Wallets.Wallets.TopUp;
 
 public record TopUpWallet(Guid WalletId, string AssetName, decimal Amount) : IRequest<WalletTransaction>;
 
