@@ -3,6 +3,9 @@ using CryptoHamsters.CryptoPairs.Domain;
 using CryptoHamsters.CryptoPairs.Infrastructure;
 using CryptoHamsters.Customers;
 using CryptoHamsters.Customers.Domain;
+using CryptoHamsters.Wallets;
+using CryptoHamsters.Wallets.Domain;
+using CryptoHamsters.Wallets.Infrastructure;
 
 using Marten;
 using Marten.Events.Daemon.Coordination;
@@ -15,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCryptoPairs();
 builder.Services.AddCustomers();
+builder.Services.AddWallets();
 
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssemblies(
@@ -35,11 +39,19 @@ builder.Services
         configure.Schema.For<Customer>().DatabaseSchemaName("customers");
         configure.Projections.Snapshot<Customer>(SnapshotLifecycle.Async,
             asyncConfig => asyncConfig.ProjectionName = "customers");
+
+        configure.Schema.For<Wallet>().DatabaseSchemaName("wallets");
+        configure.Projections.Snapshot<Wallet>(SnapshotLifecycle.Async,
+            asyncConfig => asyncConfig.ProjectionName = "wallets");
     })
     .AddAsyncDaemon(DaemonMode.Solo)
     .AddSubscriptionWithServices<PriceChangedSubscription>(ServiceLifetime.Singleton, configure =>
     {
         configure.IncludeType<CryptoPairPriceChanged>();
+    })
+    .AddSubscriptionWithServices<CustomerCreatedSubscription>(ServiceLifetime.Scoped, configure =>
+    {
+        configure.IncludeType<CustomerCreated>();
     });
 
 builder.Services
