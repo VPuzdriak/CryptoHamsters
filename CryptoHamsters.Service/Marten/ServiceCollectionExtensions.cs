@@ -33,8 +33,11 @@ internal static class ServiceCollectionExtensions
                 configure.Projections.Snapshot<Wallet>(SnapshotLifecycle.Async,
                     asyncConfig => asyncConfig.ProjectionName = "wallets");
 
-                configure.Schema.For<CustomerWallets>().DatabaseSchemaName("wallets");
-                configure.Projections.Add<CustomerWalletsProjection>(ProjectionLifecycle.Async);
+                configure.Schema.For<CustomerWalletsProjection>().DatabaseSchemaName("wallets");
+                configure.Projections.Add(
+                    new CustomerWalletsProjection(),
+                    ProjectionLifecycle.Async,
+                    "customer_wallets");
 
                 configure.Schema.For<WalletTransactions>().DatabaseSchemaName("wallets");
                 configure.Projections.Add<WalletTransactionsProjection>(ProjectionLifecycle.Async);

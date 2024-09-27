@@ -1,6 +1,8 @@
-﻿namespace CryptoHamsters.Orders.Domain;
+﻿using CryptoHamsters.Shared.Marten;
 
-public sealed class MarketOrder
+namespace CryptoHamsters.Orders.Domain;
+
+public sealed class MarketOrder : IAggregate
 {
     public Guid Id { get; init; }
     public Guid WalletId { get; init; }

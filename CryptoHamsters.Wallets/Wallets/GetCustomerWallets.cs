@@ -6,15 +6,15 @@ using MediatR;
 
 namespace CryptoHamsters.Wallets.Wallets;
 
-public record GetCustomerWallets(Guid CustomerId) : IRequest<CustomerWallets?>;
+public record GetCustomerWallets(Guid CustomerId) : IRequest<CustomerWalletsProjection?>;
 
 internal sealed class GetCustomerWalletsHandler(IQuerySession session)
-    : IRequestHandler<GetCustomerWallets, CustomerWallets?>
+    : IRequestHandler<GetCustomerWallets, CustomerWalletsProjection?>
 {
-    public Task<CustomerWallets?> Handle(
+    public Task<CustomerWalletsProjection?> Handle(
         GetCustomerWallets request,
         CancellationToken cancellationToken) =>
-        session.Query<CustomerWallets>()
+        session.Query<CustomerWalletsProjection>()
             .Where(cw => cw.Id == request.CustomerId)
             .FirstOrDefaultAsync(cancellationToken);
 }

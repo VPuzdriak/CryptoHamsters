@@ -1,6 +1,8 @@
-﻿namespace CryptoHamsters.Wallets.Domain;
+﻿using CryptoHamsters.Shared.Marten;
 
-public sealed class Wallet
+namespace CryptoHamsters.Wallets.Domain;
+
+public sealed class Wallet : IAggregate
 {
     public Guid Id { get; init; }
     public Guid CustomerId { get; init; }

@@ -19,7 +19,7 @@ public static class CustomerWalletsQuery
             customerWallets.Id,
             customerWallets.CustomerName,
             customerWallets.Wallets
-                .Select(w => new CustomerWalletSpecsPayload(w.Id, w.Type, w.CreatedAtUtc))
+                .Select(w => new CustomerWalletSpecsPayload(w.Id, w.Type, w.Assets, w.CreatedAtUtc))
                 .ToList());
     }
 }
