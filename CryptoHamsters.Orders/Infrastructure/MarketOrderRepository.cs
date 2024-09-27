@@ -8,6 +8,7 @@ public interface IMarketOrderRepository
 {
     Task<IReadOnlyList<MarketOrder>> GetAsync(Guid walletId, CancellationToken cancellationToken);
     Task<IReadOnlyList<MarketOrder>> GetPlacedOrdersAsync(CancellationToken cancellationToken, int first = 10);
+    Task<MarketOrder?> GetFromVersionAsync(MarketOrder state, CancellationToken cancellationToken);
     Task CreateAsync(Guid id, MarketOrderPlaced marketOrderPlaced, CancellationToken cancellationToken);
     Task UpdateWithAsync<T>(Guid id, T @event, CancellationToken cancellationToken) where T : class;
 }
@@ -23,6 +24,13 @@ internal sealed class MarketOrderRepository(IDocumentSession documentSession) : 
             .OrderBy(mo => mo.PlacedAtUtc)
             .Take(first)
             .ToListAsync(cancellationToken);
+
+    public Task<MarketOrder?> GetFromVersionAsync(MarketOrder state, CancellationToken cancellationToken) =>
+        documentSession.Events.AggregateStreamAsync(
+            fromVersion: state.Version,
+            state: state,
+            streamId: state.Id,
+            token: cancellationToken);
 
     public Task CreateAsync(Guid id, MarketOrderPlaced marketOrderPlaced, CancellationToken cancellationToken)
     {

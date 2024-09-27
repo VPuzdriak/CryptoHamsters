@@ -25,7 +25,14 @@ internal sealed class MarketOrderFulfilmentService(IServiceProvider serviceProvi
 
             foreach (var placedOrder in placedOrders)
             {
-                var cryptoPair = await cryptoPairRepository.GetAsync(placedOrder.CryptoPairId, stoppingToken);
+                var order = await marketOrderRepository.GetFromVersionAsync(placedOrder, stoppingToken);
+
+                if (order is null || order.Status != OrderStatus.Placed)
+                {
+                    continue;
+                }
+
+                var cryptoPair = await cryptoPairRepository.GetAsync(order.CryptoPairId, stoppingToken);
 
                 if (cryptoPair == null)
                 {
@@ -33,36 +40,37 @@ internal sealed class MarketOrderFulfilmentService(IServiceProvider serviceProvi
                 }
 
                 var fulfilledPrice = cryptoPair.Price;
-                var fulfilledAmount = placedOrder.QuoteAssetAmount / fulfilledPrice;
+                var fulfilledAmount = order.QuoteAssetAmount / fulfilledPrice;
 
                 var walletAssetWithdrawn = new WalletAssetWithdrawn(
                     Guid.NewGuid(),
-                    placedOrder.WalletId,
-                    new WalletAsset(cryptoPair.QuoteAsset, placedOrder.QuoteAssetAmount),
+                    order.WalletId,
+                    new WalletAsset(cryptoPair.QuoteAsset, order.QuoteAssetAmount),
                     DateTime.UtcNow);
 
                 var walletToppedUp = new WalletToppedUp(
                     Guid.NewGuid(),
-                    placedOrder.WalletId,
+                    order.WalletId,
                     new WalletAsset(cryptoPair.BaseAsset, fulfilledAmount),
                     DateTime.UtcNow);
 
                 await walletRepository.UpdateWithAsync(
-                    placedOrder.WalletId,
+                    order.WalletId,
                     stoppingToken,
                     walletAssetWithdrawn,
                     walletToppedUp);
 
                 var orderFulfilled = new MarketOrderFulfilled(
-                    placedOrder.Id,
+                    order.Id,
                     fulfilledAmount,
                     fulfilledPrice,
                     DateTime.UtcNow);
 
-                await marketOrderRepository.UpdateWithAsync(placedOrder.Id, orderFulfilled, CancellationToken.None);
+                await marketOrderRepository.UpdateWithAsync(order.Id, orderFulfilled, CancellationToken.None);
             }
-            
-            await Task.Delay(4_000, stoppingToken);
+
+            // Artificially waiting for supply
+            await Task.Delay(200, stoppingToken);
         }
     }
 }
