@@ -22,8 +22,8 @@ internal sealed class CryptoPairsRepository(IDocumentSession documentSession) : 
 {
     public async Task<bool> PairExistsAsync(Guid id, CancellationToken cancellationToken)
     {
-        var cryptoPair = await documentSession.Events.AggregateStreamAsync<CryptoPair>(id, token: cancellationToken);
-        return cryptoPair != null;
+        var cryptoPairStream = await documentSession.Events.FetchStreamStateAsync(id, token: cancellationToken);
+        return cryptoPairStream != null;
     }
 
     public async Task CreateAsync(
